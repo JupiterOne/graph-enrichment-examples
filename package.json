@@ -1,0 +1,14 @@
+{
+  "name": "@jupiterone/graph-enrichment-examples",
+  "version": "1.0.0",
+  "repository": "git@github.com:JupiterOne/graph-enrichment-examples.git",
+  "author": "JupiterOne",
+  "license": "MIT",
+  "scripts": {
+    "run:set-user-sso-mfa": "export $(grep -v '^#' .env | xargs); node src/set-user-sso-mfa.js"
+  },
+  "dependencies": {
+    "@jupiterone/jupiterone-client-nodejs": "^0.18.1",
+    "sleep": "^6.1.0"
+  }
+}
