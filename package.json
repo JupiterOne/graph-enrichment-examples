@@ -5,10 +5,14 @@
   "author": "JupiterOne",
   "license": "MIT",
   "scripts": {
-    "run:set-user-sso-mfa": "export $(grep -v '^#' .env | xargs); node src/set-user-sso-mfa.js"
+    "run:setUserSSOandMFA": "export $(grep -v '^#' .env | xargs); ts-node src/setUserSSOandMFA.ts"
   },
   "dependencies": {
     "@jupiterone/jupiterone-client-nodejs": "^0.18.1",
     "sleep": "^6.1.0"
+  },
+  "devDependencies": {
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
   }
 }
