@@ -53,7 +53,8 @@ where
 ]
 
 async function main() {
-  enrichGraph(baseQuery, enrichmentRules);
+  await enrichGraph(baseQuery, enrichmentRules);
 }
 
-main();
+main().catch((err) =>
+  console.error(err, 'Error running enrichGraph'));
