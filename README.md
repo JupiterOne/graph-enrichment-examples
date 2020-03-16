@@ -10,7 +10,7 @@ Each example contains two main elements:
 * `enrichmentRules` -- a set of rules, where each rule contains a condition
   query and one or more properties to set when a match is found or not found.
 
-  The condition query in each rule should has either `_key='{{entityKey}}'` or
+  The condition query in each rule should have either `_key='{{entityKey}}'` or
   `_id='{{entityId}}'` filter.
 
 ## Examples

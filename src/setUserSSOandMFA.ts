@@ -16,7 +16,7 @@ const baseQuery = `Find User with _type!='${ssoProvider}_user'`;
  * Based on the query result of each rule, set certain properties when a
  * matching result is found or not found.
  * 
- * The condition query in each rule should has either `_key='{{entityKey}}'` or 
+ * The condition query in each rule should have either `_key='{{entityKey}}'` or 
  * `_id='{{entityId}}'` filter.
  */
 const enrichmentRules: EnrichmentRule[] = [
