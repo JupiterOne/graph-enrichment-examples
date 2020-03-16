@@ -39,7 +39,10 @@ export default async function enrichGraph(
     const entityKey = entity.entity._key;
     
     for (const r of enrichmentRules) {
-      const query = r.query.replace('{{entityKey}}', entityKey).replace(/\n/g, ' ');
+      const query = r.query
+        .replace('{{entityId}}', entityId)
+        .replace('{{entityKey}}', entityKey)
+        .replace(/\n/g, ' ');
       const result = await j1Client.queryV1(query);
       
       if (result && result.length === 1) {
