@@ -28,7 +28,8 @@ that has Account
 where 
   userA.name = userB.name or 
   userA.username = userB.username or
-  userA.email = userB.email`,
+  userA.email = userB.email or
+  userA.email = userB.login`,
     whenFound: {
       ssoUser: true
     },
@@ -45,7 +46,8 @@ where
 where 
   userA.name = userB.name or 
   userA.username = userB.username or
-  userA.email = userB.email`,
+  userA.email = userB.email or
+  userA.email = userB.login`,
     whenFound: {
       mfaEnabled: true
     },
