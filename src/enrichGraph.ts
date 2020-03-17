@@ -1,4 +1,5 @@
-const sleep = require('sleep');
+import { retry } from '@lifeomic/attempt';
+
 const JupiterOneClient = require('@jupiterone/jupiterone-client-nodejs');
 
 const {
@@ -22,13 +23,21 @@ export default async function enrichGraph(
   baseQuery: string, 
   enrichmentRules: EnrichmentRule[]
 ) {
-  const j1Client =
-  await (new JupiterOneClient(
-    { account, username, password, poolId, clientId, accessToken }
-  )).init();
+  const retryOptions = { 
+    initialDelay: 1000, 
+    delay: 2000, 
+    factor: 1.5, 
+    maxAttempts: 10,
+  };
 
-  const entities = await j1Client.queryV1(baseQuery);
+  const j1Client =
+    await (new JupiterOneClient(
+      { account, username, password, poolId, clientId, accessToken }
+    )).init();
+
+  const entities: any[] = await j1Client.queryV1(baseQuery);
   let count = 0;
+  let updated = 0;
 
   for (const entity of entities || []) {
     count++;
@@ -43,16 +52,48 @@ export default async function enrichGraph(
         .replace('{{entityId}}', entityId)
         .replace('{{entityKey}}', entityKey)
         .replace(/\n/g, ' ');
-      const result = await j1Client.queryV1(query);
+
+      let result;
+      await retry(async () => {
+        result = await j1Client.queryV1(query);
+      }, retryOptions);
       
       if (result && result.length === 1) {
-        await j1Client.updateEntity(entityId, r.whenFound);
+        if (diff(entity.properties, r.whenFound)) {
+          console.log(`>>> updating entity properties`);
+          console.log({ ...r.whenFound });
+          await retry(async () => {
+            await j1Client.updateEntity(entityId, r.whenFound);
+          }, retryOptions);
+          updated++;
+        }
       }
       else {
-        await j1Client.updateEntity(entityId, r.notFound);
+        if (diff(entity.properties, r.notFound)) {
+          console.log(`>>> updating entity properties`);
+          console.log({ ...r.notFound });
+          await retry(async () => {
+            await j1Client.updateEntity(entityId, r.notFound);
+          }, retryOptions);
+          updated++;
+        }
       }
-      
-      sleep.sleep(2); // to stay within 1 query/sec rate limit
     }
   }
+
+  console.log(`Finished processing. Updated ${updated} of ${entities.length} entities.`);
+}
+
+function diff(source: any, properties: any): boolean {
+  if (source && properties) {
+    for (const [key, value] of Object.entries(properties)) {
+      if (value === null && source[key] === undefined) {
+        continue;
+      }
+      else if (source[key] !== value) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
