@@ -21,10 +21,10 @@ const baseQuery = `Find User with _type!='${ssoProvider}_user'`;
  */
 const enrichmentRules: EnrichmentRule[] = [
   {
-    query: `Find User with _key='{{entityKey}}' as userA 
+    query: `Find User with _id='{{entityId}}' as userA 
 that has Account 
   that connects ${ssoProvider}_application
-  that assigned ${ssoProvider}_user as userB
+  that assigned ${ssoProvider}_user with active=true as userB
 where 
   userA.name = userB.name or 
   userA.username = userB.username or
@@ -38,10 +38,10 @@ where
     },
   },
   {
-    query: `Find User with _key='{{entityKey}}' and ssoUser=true as userA 
+    query: `Find User with _id='{{entityId}}' and ssoUser=true as userA 
   that has Account 
   that connects ${ssoProvider}_application
-  that assigned ${ssoProvider}_user as userB
+  that assigned ${ssoProvider}_user with active=true as userB
   that (assigned|has|uses) mfa_device
 where 
   userA.name = userB.name or 
