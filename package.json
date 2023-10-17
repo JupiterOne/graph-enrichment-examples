@@ -1,9 +1,13 @@
 {
   "name": "@jupiterone/graph-enrichment-examples",
   "version": "1.0.0",
-  "repository": "git@github.com:JupiterOne/graph-enrichment-examples.git",
-  "author": "JupiterOne",
+  "description": "Automatically generated package.json, please edit manually",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JupiterOne/graph-enrichment-examples"
+  },
   "license": "MIT",
+  "author": "JupiterOne",
   "scripts": {
     "run:setUserSSOandMFA": "export $(grep -v '^#' .env | xargs); ts-node src/setUserSSOandMFA.ts"
   },
